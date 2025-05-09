@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="bilagon-ai-bot" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="bilagon-ai-bot" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (mini-tournament-system)" project-jdk-type="Python SDK" />
 </project>
