@@ -1,0 +1,32 @@
+ Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+*.db
+*.sqlite3
+
+ FastAPI specific
+instance/
+*.log
+*.pot
+*.mo
+
+ IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+ OS-specific files
+.DS_Store
+Thumbs.db
