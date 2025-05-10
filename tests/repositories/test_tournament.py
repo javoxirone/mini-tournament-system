@@ -2,6 +2,10 @@ import pytest
 from datetime import datetime
 from app.repositories.tournament import TournamentRepo
 from app.schemas.tournament import TournamentInDBInput
+from app.exceptions.tournament import (
+    TournamentNotFoundError,
+    TournamentNameExistsError
+)
 from tests.repositories.config import db_session
 
 
@@ -34,9 +38,7 @@ class TestTournamentCreation:
 
     def test_create_duplicate_tournament(self, tournament_repo, tournament_data):
         tournament_repo.create_tournament(tournament_data)
-        with pytest.raises(
-            ValueError, match="Tournament with this name already exists"
-        ):
+        with pytest.raises(TournamentNameExistsError):
             tournament_repo.create_tournament(tournament_data)
 
 
@@ -48,8 +50,9 @@ class TestTournamentRetrieval:
         assert tournament.max_players == created_tournament.max_players
 
     def test_get_nonexistent_tournament(self, tournament_repo):
-        with pytest.raises(ValueError, match="Tournament with id 999 not found"):
+        with pytest.raises(TournamentNotFoundError) as excinfo:
             tournament_repo.get_tournament(999)
+        assert "Tournament with id 999 not found" in str(excinfo.value)
 
     def test_get_tournaments(self, tournament_repo, created_tournament):
         tournaments = tournament_repo.get_tournaments()
@@ -67,18 +70,19 @@ class TestTournamentUpdate:
         )
 
     def test_update_nonexistent_tournament(self, tournament_repo, tournament_data):
-        with pytest.raises(ValueError, match="Tournament with id 999 not found"):
+        with pytest.raises(TournamentNotFoundError) as excinfo:
             tournament_repo.update_tournament(999, tournament_data)
+        assert "Tournament with id 999 not found" in str(excinfo.value)
 
 
 class TestTournamentDeletion:
     def test_delete_tournament(self, tournament_repo, created_tournament):
         assert tournament_repo.delete_tournament(created_tournament.id) is True
-        with pytest.raises(
-            ValueError, match=f"Tournament with id {created_tournament.id} not found"
-        ):
+        with pytest.raises(TournamentNotFoundError) as excinfo:
             tournament_repo.get_tournament(created_tournament.id)
+        assert f"Tournament with id {created_tournament.id} not found" in str(excinfo.value)
 
     def test_delete_nonexistent_tournament(self, tournament_repo):
-        with pytest.raises(ValueError, match="Tournament with id 999 not found"):
+        with pytest.raises(TournamentNotFoundError) as excinfo:
             tournament_repo.delete_tournament(999)
+        assert "Tournament with id 999 not found" in str(excinfo.value)

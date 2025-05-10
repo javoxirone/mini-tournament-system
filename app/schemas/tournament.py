@@ -1,6 +1,6 @@
 from datetime import datetime
+from pydantic import BaseModel, ConfigDict
 
-from pydantic import BaseModel
 
 class TournamentInDBInput(BaseModel):
     name: str
@@ -13,3 +13,5 @@ class TournamentInDBOutput(BaseModel):
     max_players: int
     start_at: datetime
     created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

@@ -3,6 +3,10 @@ from datetime import datetime
 from app.models import Tournament
 from app.repositories.player import PlayerRepo
 from app.schemas.player import PlayerInDBInput
+from app.exceptions.player import (
+    PlayerNotFoundError,
+    PlayerEmailExistsError
+)
 from tests.repositories.config import db_session
 
 
@@ -44,10 +48,9 @@ class TestPlayerCreation:
         assert isinstance(player.registered_at, datetime)
 
     def test_create_duplicate_player(self, player_repo, player_data, created_player):
-        with pytest.raises(
-            ValueError, match="Player with this email already exists in the tournament"
-        ):
+        with pytest.raises(PlayerEmailExistsError) as excinfo:
             player_repo.create_player(player_data)
+        assert "Player with email 'john@example.com' already exists in tournament 1" in str(excinfo.value)
 
 
 class TestPlayerRetrieval:
@@ -58,8 +61,9 @@ class TestPlayerRetrieval:
         assert player.email == created_player.email
 
     def test_get_nonexistent_player(self, player_repo):
-        with pytest.raises(ValueError, match="Player with id 999 not found"):
+        with pytest.raises(PlayerNotFoundError) as excinfo:
             player_repo.get_player(999)
+        assert "Player with id 999 not found" in str(excinfo.value)
 
     def test_get_players(self, player_repo, created_player):
         players = player_repo.get_players()
@@ -82,17 +86,19 @@ class TestPlayerUpdate:
         assert updated_player.email == updated_data.email
 
     def test_update_nonexistent_player(self, player_repo, player_data):
-        with pytest.raises(ValueError, match="Player with id 999 not found"):
+        with pytest.raises(PlayerNotFoundError) as excinfo:
             player_repo.update_player(999, player_data)
+        assert "Player with id 999 not found" in str(excinfo.value)
 
 
 class TestPlayerDeletion:
     def test_delete_player(self, player_repo, created_player):
         assert player_repo.delete_player(created_player.id) is True
-        with pytest.raises(
-            ValueError, match=f"Player with id {created_player.id} not found"
-        ):
+        with pytest.raises(PlayerNotFoundError) as excinfo:
             player_repo.get_player(created_player.id)
+        assert f"Player with id {created_player.id} not found" in str(excinfo.value)
 
     def test_delete_nonexistent_player(self, player_repo):
-        assert player_repo.delete_player(999) is False
+        with pytest.raises(PlayerNotFoundError) as excinfo:
+            player_repo.delete_player(999)
+        assert "Player with id 999 not found" in str(excinfo.value)
