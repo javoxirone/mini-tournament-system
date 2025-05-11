@@ -1,11 +1,11 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+from app.config import DATABASE_TEST_URL
 from app.db import Base
 
-SQLALCHEMY_DATABASE_URL = (
-    "postgresql://postgres:123456@localhost:5432/mini_tournament_system_test"
-)
+SQLALCHEMY_DATABASE_URL = DATABASE_TEST_URL
 
 
 @pytest.fixture(scope="function")
