@@ -1,18 +1,6 @@
 ﻿# Mini Tournament System
 
-A lightweight REST API to manage single-elimination tournaments.  
-Built with FastAPI, SQLAlchemy, and Alembic, the system allows you to create tournaments, register players, generate brackets, and track match progress.
-
----
-
-## 🚀 Features
-
-- Create and manage tournaments
-- Register players
-- Automatically generate single-elimination brackets
-- Record match results and progress winners
-- View matches and current bracket status
-- RESTful API with Swagger UI
+A lightweight REST API to manage tournaments.
 
 ---
 
@@ -56,8 +44,8 @@ pip install -r requirements.txt
 Update your `.env` with database credentials:
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/mini_tournament
-SECRET_KEY=your_secret_key_here
+DATABASE_URL=postgresql://user:password@localhost:5432/mini_tournament_system
+DATABASE_URL=postgresql://user:password@localhost:5432/mini_tournament_system_test
 ```
 
 ---
@@ -81,7 +69,6 @@ uvicorn app.main:app --reload
 ```
 
 - API Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
-- ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
 
