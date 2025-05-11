@@ -44,8 +44,36 @@ class PlayerRepo:
                 f"Failed to fetch players for tournament {tournament_id}: {str(e)}"
             )
 
+    def get_players_count_by_tournament(self, tournament_id: int) -> int:
+        try:
+            players_count = (
+                self.db.query(Player)
+                .filter(Player.tournament_id == tournament_id)
+                .count()
+            )
+            return players_count
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            raise PlayerFetchError(
+                "Failed to fetch players for tournament {tournament_id}: {str(e)}"
+            )
+
+    def _validate_player_registration(self, tournament_id: int):
+        from app.services.tournament import get_tournament
+
+        tournament = get_tournament(tournament_id)
+
+        allowed_num_of_players = tournament.max_players
+        registered_num_of_players = self.get_players_count_by_tournament(tournament_id)
+        if allowed_num_of_players <= registered_num_of_players:
+            raise PlayerCreationError(
+                f"Tournament {tournament.name} already has {registered_num_of_players} players."
+            )
+
     def create_player(self, data: PlayerInDBInput) -> PlayerInDBOutput:
         try:
+            self._validate_player_registration(data.tournament_id)
+
             new_player = Player(
                 name=data.name, email=data.email, tournament_id=data.tournament_id
             )
