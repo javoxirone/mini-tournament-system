@@ -2,16 +2,9 @@ from typing import Union
 
 from fastapi import FastAPI
 
+from app.api.tournament import router as tournament_router
+
 app = FastAPI()
 
 
-@app.get("/")
-def read_root() -> dict[str, str]:
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(
-    item_id: int, q: Union[str, None] = None
-) -> dict[str, Union[int, str, None]]:
-    return {"item_id": item_id, "q": q}
+app.include_router(tournament_router)

@@ -1,13 +1,20 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
+
+from app.schemas.common import UTCBaseModel
 
 
-class PlayerInDBInput(BaseModel):
+class PlayerInRequest(UTCBaseModel):
+    name: str
+    email: str
+
+class PlayerInDBInput(UTCBaseModel):
     name: str
     email: str
     tournament_id: int
 
-class PlayerInDBOutput(BaseModel):
+
+class PlayerInDBOutput(UTCBaseModel):
     id: int
     name: str
     email: str

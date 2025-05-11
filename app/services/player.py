@@ -10,7 +10,6 @@ from app.exceptions.player import (
 from app.repositories.player import PlayerRepo
 from app.schemas.player import PlayerInDBInput, PlayerInDBOutput
 
-
 def create_player(data: PlayerInDBInput) -> PlayerInDBOutput:
     player_repo = PlayerRepo()
     try:
@@ -48,11 +47,21 @@ def get_players_by_tournament(tournament_id: int) -> list[PlayerInDBOutput]:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def get_players_count_by_tournament(tournament_id: int) -> int:
+    player_repo = PlayerRepo()
+    try:
+        return player_repo.get_players_count_by_tournament(tournament_id)
+    except PlayerFetchError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 def update_player(player_id: int, data: PlayerInDBInput) -> PlayerInDBOutput:
     player_repo = PlayerRepo()
     try:
         updated_player = player_repo.update_player(player_id, data)
         return updated_player
+    except PlayerNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PlayerEmailExistsError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PlayerUpdateError as e:
