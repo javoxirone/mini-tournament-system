@@ -45,7 +45,7 @@ Update your `.env` with database credentials:
 
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/mini_tournament_system
-DATABASE_URL=postgresql://user:password@localhost:5432/mini_tournament_system_test
+DATABASE_TEST_URL=postgresql://user:password@localhost:5432/mini_tournament_system_test
 ```
 
 ---
