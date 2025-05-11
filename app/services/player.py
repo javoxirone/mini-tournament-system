@@ -10,7 +10,17 @@ from app.exceptions.player import (
 from app.repositories.player import PlayerRepo
 from app.schemas.player import PlayerInDBInput, PlayerInDBOutput
 
+
 def create_player(data: PlayerInDBInput) -> PlayerInDBOutput:
+    """
+    Creates new player on the database.
+
+    :param data: Player data.
+    :type data: PlayerInDBInput
+
+    :return: New player data.
+    :rtype: PlayerInDBOutput
+    """
     player_repo = PlayerRepo()
     try:
         new_player = player_repo.create_player(data)
@@ -22,6 +32,15 @@ def create_player(data: PlayerInDBInput) -> PlayerInDBOutput:
 
 
 def get_player(player_id: int) -> PlayerInDBOutput:
+    """
+    Fetches single player based on player_id.
+
+    :param player_id: Player ID.
+    :type player_id: int
+
+    :return: Player data.
+    :rtype: PlayerInDBOutput
+    """
     player_repo = PlayerRepo()
     try:
         return player_repo.get_player(player_id)
@@ -32,6 +51,12 @@ def get_player(player_id: int) -> PlayerInDBOutput:
 
 
 def get_players() -> list[PlayerInDBOutput]:
+    """
+    Fetches the list of players from the database.
+
+    :return: List of players.
+    :rtype: list[PlayerInDBOutput]
+    """
     player_repo = PlayerRepo()
     try:
         return player_repo.get_players()
@@ -40,6 +65,15 @@ def get_players() -> list[PlayerInDBOutput]:
 
 
 def get_players_by_tournament(tournament_id: int) -> list[PlayerInDBOutput]:
+    """
+    Fetches the list of players based on tournament_id.
+
+    :param tournament_id: Tournament ID.
+    :type tournament_id: int
+
+    :return: List of players.
+    :rtype: list[PlayerInDBOutput]
+    """
     player_repo = PlayerRepo()
     try:
         return player_repo.get_players_by_tournament(tournament_id)
@@ -48,6 +82,15 @@ def get_players_by_tournament(tournament_id: int) -> list[PlayerInDBOutput]:
 
 
 def get_players_count_by_tournament(tournament_id: int) -> int:
+    """
+    Fetches the number of registered players in a tournament.
+
+    :param tournament_id: Tournament ID.
+    :type tournament_id: int
+
+    :return: Number of registered players.
+    :rtype: int
+    """
     player_repo = PlayerRepo()
     try:
         return player_repo.get_players_count_by_tournament(tournament_id)
@@ -56,6 +99,18 @@ def get_players_count_by_tournament(tournament_id: int) -> int:
 
 
 def update_player(player_id: int, data: PlayerInDBInput) -> PlayerInDBOutput:
+    """
+    Updates the player data based on player_id.
+
+    :param player_id: Player ID.
+    :type player_id: int
+
+    :param data: Player data.
+    :type data: PlayerInDBInput
+
+    :return: Updated player data.
+    :rtype: PlayerInDBOutput
+    """
     player_repo = PlayerRepo()
     try:
         updated_player = player_repo.update_player(player_id, data)
@@ -69,6 +124,15 @@ def update_player(player_id: int, data: PlayerInDBInput) -> PlayerInDBOutput:
 
 
 def delete_player(player_id: int) -> bool:
+    """
+    Deletes a player based on player_id.
+
+    :param player_id: Player ID.
+    :type player_id: int
+
+    :return: True if the player was deleted successfully, False otherwise.
+    :rtype: bool
+    """
     player_repo = PlayerRepo()
     try:
         return player_repo.delete_player(player_id)
